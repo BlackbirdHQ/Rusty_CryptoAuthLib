@@ -249,6 +249,7 @@ where
             Ok(v)   => v,
             Err(_e)  => defmt::error!("I2C READ ERROR: failed to read the first (or count) byte of the response from the device")
         };
+        if count_byte[0] == 0 { return Err(crate::constants::DECODE_ERROR::get_error(0xF0)); }
         // Perform a subsequent read for the remaining (response) bytes
         let mut resp = [0; (constants::ATCA_CMD_SIZE_MAX) as usize];
         match self
